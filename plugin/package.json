@@ -1,13 +1,16 @@
 {
-  "name": "node-js-template",
+  "name": "gatsby-source-package-licenses",
   "version": "1.0.0",
-  "main": "index.js",
-  "repository": "https://github.com/phartenfeller/node-js-template.git",
-  "author": "phartenfeller",
+  "description": "Source plugin for pulling license data from NPM packages.",
+  "author": "Philipp Hartenfeller <hartenfeller.dev@gmail.com>",
   "license": "MIT",
-  "scripts": {
-    "start": "node index.js"
+  "repository": "https://github.com/phartenfeller/gatsby-source-package-licenses.git",
+  "homepage": "https://github.com/phartenfeller/atsby-source-package-licenses#readme",
+  "bugs": {
+    "url": "https://github.com/phartenfeller/atsby-source-package-licenses/issues"
   },
+  "main": "index.js",
+  "scripts": {},
   "devDependencies": {
     "eslint": "^7.23.0",
     "eslint-config-airbnb-base": "^14.2.1",
@@ -15,5 +18,13 @@
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-prettier": "^3.3.1",
     "prettier": "^2.2.1"
-  }
+  },
+  "keywords": [
+    "gatsby",
+    "gatsby-plugin",
+    "gatsby-source-plugin",
+    "license",
+    "npm-license",
+    "package-license"
+  ]
 }

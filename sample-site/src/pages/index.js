@@ -1,11 +1,28 @@
-import * as React from "react"
-import { Link } from "gatsby"
+import { graphql } from "gatsby"
 import { StaticImage } from "gatsby-plugin-image"
-
+import * as React from "react"
 import Layout from "../components/layout"
 import Seo from "../components/seo"
 
-const IndexPage = () => (
+export const query = graphql`
+  query MyQuery {
+    allPackageLicense {
+      edges {
+        node {
+          id
+          identifier
+          license
+          licenseText
+          package
+          url
+          version
+        }
+      }
+    }
+  }
+`
+
+const IndexPage = ({ data }) => (
   <Layout>
     <Seo title="Home" />
     <h1>Hi people</h1>
@@ -19,10 +36,12 @@ const IndexPage = () => (
       alt="A Gatsby astronaut"
       style={{ marginBottom: `1.45rem` }}
     />
-    <p>
-      <Link to="/page-2/">Go to page 2</Link> <br />
-      <Link to="/using-typescript/">Go to "Using TypeScript"</Link>
-    </p>
+    <div>
+      <h2>Licenses</h2>
+      {data.allPackageLicense.edges.map(({ node }) => (
+        <div>{node.identifier}</div>
+      ))}
+    </div>
   </Layout>
 )
 
