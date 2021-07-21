@@ -1,36 +1,47 @@
-const getLicenses = require('./src/fsAPI');
+const hashCacheFile = require('./src/cacheUtil');
+const createNodes = require('./src/createNodes');
+
+function addNodes(nodes, createNode) {
+  for (let i = 0; i < nodes.length; i += 1) {
+    createNode(nodes[i]);
+  }
+}
 
 exports.sourceNodes = async (
-  { actions, store, createNodeId, cache, reporter, createContentDigest },
+  { actions, createNodeId, cache, reporter, createContentDigest },
   configOptions
 ) => {
+  let cacheHash = null;
+
   const { createNode } = actions;
+  const { cacheFile } = configOptions;
 
-  const licenses = await getLicenses(reporter, 1);
+  if (cacheFile) {
+    // get hash of cacheFile
+    const { success, hash } = await hashCacheFile(cacheFile, reporter);
+    if (success) {
+      cacheHash = hash;
+      const data = await cache.get(hash);
 
-  for (let i = 0; i <= licenses.length; i += 1) {
-    const license = licenses[i];
-
-    if (!license) {
-      reporter.warn(`Skipping license for i => ${i}`);
-    } else if (!license.identifier) {
-      reporter.warn(`Skipping license => ${JSON.stringify(license)}`);
-    } else {
-      const nodeContent = JSON.stringify(license);
-
-      const nodeMeta = {
-        id: createNodeId(`package-license-${license.identifier}`),
-        parent: null,
-        children: [],
-        internal: {
-          type: `PackageLicense`,
-          content: nodeContent,
-          contentDigest: createContentDigest(license),
-        },
-      };
-
-      const node = { ...license, ...nodeMeta };
-      createNode(node);
+      // if valid cache found
+      if (Array.isArray(data) && data.length > 0) {
+        reporter.info('Got licenses from cache');
+        addNodes(data, createNode);
+        return;
+      }
     }
   }
+
+  const nodes = await createNodes({
+    reporter,
+    createNodeId,
+    createContentDigest,
+  });
+
+  if (cacheHash) {
+    reporter.info('Adding licenses to cache');
+    await cache.set(cacheHash, nodes);
+  }
+
+  addNodes(nodes, createNode);
 };
