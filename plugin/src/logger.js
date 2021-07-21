@@ -1,3 +1,6 @@
+// to make the scanning testible without gatsby the logger
+// decides on runtime if gatsbys reporter is available
+// and falls back to console.log
 class Logger {
   constructor(reporter = null, level = 1) {
     this.reporterAvailable = reporter !== null;

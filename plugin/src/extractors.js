@@ -1,3 +1,4 @@
+// different strategies to get a url from package.json
 function getUrl(manifest) {
   if (manifest.homepage) return manifest.homepage;
 
@@ -23,6 +24,7 @@ function getUrl(manifest) {
   return null;
 }
 
+// different strategies to get the license type from package.json
 function getLicense(manifest) {
   if (typeof manifest.license === 'object') {
     if (manifest.license.type) return manifest.license.type;

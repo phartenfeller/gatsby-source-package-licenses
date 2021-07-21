@@ -6,6 +6,7 @@ const { readFile, asyncReadDir } = require('./asyncedFs');
 const EXCLUDED_FOLDERS = ['.bin', '.yarn-integrity'];
 const ROOT_PATH = './node_modules';
 
+// build license info object
 async function createLicenseInfo(packagePath, manifest, logger) {
   try {
     const obj = {};
@@ -36,6 +37,9 @@ async function getLicenseInfo(packagePath, logger, goDeeper = false) {
   const manifestPath = path.join(packagePath, 'package.json');
   const packageData = await readFile(manifestPath);
 
+  // sometimes folders in node_modules have subfolders for each module
+  // then they don't have a package.json file
+  // so scan the subfolders again
   if (!packageData.exists && goDeeper === true) {
     logger.debug(`Going deeper for => ${packagePath}`);
     try {
@@ -53,6 +57,8 @@ async function getLicenseInfo(packagePath, logger, goDeeper = false) {
       return null;
     }
   }
+
+  // if package.json was found
   return createLicenseInfo(
     packagePath,
     JSON.parse(packageData.content),
@@ -62,7 +68,11 @@ async function getLicenseInfo(packagePath, logger, goDeeper = false) {
 
 async function getLicenses(reporter = null, level = 1) {
   const logger = new Logger(reporter, level);
+
+  // get directories located in node_modules
   const directories = await asyncReadDir(ROOT_PATH);
+
+  // filter excluded folders
   const packageList = directories.filter(
     (dir) => !EXCLUDED_FOLDERS.includes(dir)
   );

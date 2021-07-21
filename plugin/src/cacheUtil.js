@@ -1,6 +1,7 @@
 const crypto = require('crypto');
 const { readFile } = require('./asyncedFs');
 
+// returns a hash of the file contents
 function checksumBuilder(text, fn = 'sha256') {
   return crypto.createHash(fn).update(text).digest('hex');
 }
