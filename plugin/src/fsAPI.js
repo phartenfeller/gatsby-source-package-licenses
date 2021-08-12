@@ -1,4 +1,5 @@
 const path = require('path');
+const { statSync } = require('fs');
 const { getUrl, getLicense } = require('./extractors');
 const Logger = require('./logger');
 const { readFile, asyncReadDir } = require('./asyncedFs');
@@ -81,7 +82,10 @@ async function getLicenses(reporter = null, level = 1) {
   const licenses = await Promise.all(
     packageList.map((packagePath) => {
       const joinedPath = path.join(ROOT_PATH, packagePath);
-      return getLicenseInfo(joinedPath, logger, true);
+      if (statSync(joinedPath).isDirectory()) {
+        return getLicenseInfo(joinedPath, logger, true);
+      }
+      return null;
     })
   );
 
