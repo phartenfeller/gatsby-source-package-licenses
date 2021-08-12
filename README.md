@@ -2,6 +2,8 @@
 
 Gatsby Plug-in to source all the licenses from the dependencies of a project.
 
+[![NPM](https://nodei.co/npm/gatsby-source-package-licenses.png)](https://nodei.co/npm/gatsby-source-package-licenses/)
+
 ## How to use
 
 Add to `gatsby-config.js`:
