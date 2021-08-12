@@ -1,6 +1,6 @@
 {
   "name": "gatsby-source-package-licenses",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Source plugin for pulling license data from NPM packages.",
   "author": "Philipp Hartenfeller <hartenfeller.dev@gmail.com>",
   "license": "MIT",
