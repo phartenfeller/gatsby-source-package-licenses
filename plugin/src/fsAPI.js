@@ -4,7 +4,6 @@ const { getUrl, getLicense } = require('./extractors');
 const Logger = require('./logger');
 const { readFile, asyncReadDir } = require('./asyncedFs');
 
-const EXCLUDED_FOLDERS = ['.bin', '.yarn-integrity'];
 const ROOT_PATH = './node_modules';
 
 // build license info object
@@ -73,10 +72,8 @@ async function getLicenses(reporter = null, level = 1) {
   // get directories located in node_modules
   const directories = await asyncReadDir(ROOT_PATH);
 
-  // filter excluded folders
-  const packageList = directories.filter(
-    (dir) => !EXCLUDED_FOLDERS.includes(dir)
-  );
+  // filter out dot folders
+  const packageList = directories.filter((dir) => !dir.startsWith('.'));
   logger.debug(`${packageList.length} packages found in node_modules`);
 
   const licenses = await Promise.all(
